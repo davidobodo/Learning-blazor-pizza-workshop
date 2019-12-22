@@ -12,7 +12,8 @@
                        min="@Pizza.MinimumSize" 
                        max="@Pizza.MaximumSize" 
                        step="1" 
-                       value="@Pizza.Size"/>
+                       @bind="@Pizza.Size"
+                       @bind:event="oninput"/>
                 <span class="size-label">
                     @(Pizza.Size)" (#@(Pizza.GetFormattedTotalPrice())) 
                 </span>
