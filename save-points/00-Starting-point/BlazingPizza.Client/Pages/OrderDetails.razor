@@ -1,6 +1,8 @@
 ﻿@page "/myorders/{orderId:int}"
 @using System.Threading
 @inject HttpClient HttpClient
+@implements IDisposable
+
 
 <div class="main">
     @if (invalidOrder)
@@ -24,7 +26,9 @@
                 </p>
             </div>
             <div class="track-order-body">
-                TODO: show more details
+                <div class="track-order-details">
+                    <OrderReview Order="@orderWithStatus.Order"/>
+                </div>
             </div>
         </div>
     }
@@ -66,5 +70,10 @@
 
             await Task.Delay(4000);
         }
+    }
+
+    void IDisposable.Dispose()
+    {
+        pollingCancellationToken?.Cancel();
     }
 }
