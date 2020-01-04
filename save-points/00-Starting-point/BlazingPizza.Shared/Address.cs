@@ -15,7 +15,7 @@ namespace BlazingPizza
         [MaxLength(100)]
         public string Line2 { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required(ErrorMessage = "Seriously, no address?"), MaxLength(50)]
         public string City { get; set; }
 
         [Required, MaxLength(20)]
