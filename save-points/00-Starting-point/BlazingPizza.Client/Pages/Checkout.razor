@@ -25,11 +25,21 @@
 </div>
 
 @code {
-     async Task PlaceOrder()
+    async Task PlaceOrder()
     {
-
         var newOrderId = await HttpClient.PostJsonAsync<int>("orders", OrderState.Order);
         OrderState.ResetOrder();
         NavigationManager.NavigateTo($"myorders/{newOrderId}");
+    }
+
+     [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
+        if (!authState.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("user/signin?redirectUri=/checkout", true);
+        }
     }
 }
