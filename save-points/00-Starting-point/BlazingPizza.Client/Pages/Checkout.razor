@@ -4,24 +4,31 @@
 @inject NavigationManager NavigationManager
 
 <div class="main">
-    <EditForm Model="OrderState.Order.DeliveryAddress" OnValidSubmit="PlaceOrder">
-        <div class="checkout-cols">
-            <div class="checkout-order-details">
-                <h4>Review Order</h4>
-                <OrderReview Order="OrderState.Order"/>
-            </div>
+    <AuthorizeView Context="authContext">
+        <NotAuthorized>
+            <h2>Redirecting you...</h2>
+        </NotAuthorized>
+        <Authorized>
+            <EditForm Model="OrderState.Order.DeliveryAddress" OnValidSubmit="PlaceOrder">
+                <div class="checkout-cols">
+                    <div class="checkout-order-details">
+                        <h4>Review Order</h4>
+                        <OrderReview Order="OrderState.Order"/>
+                    </div>
 
-            <div class="checkout-order-details">
-                <h4>Deliver to...</h4>
-                <AddressEditor Address="@OrderState.Order.DeliveryAddress"/>
-            </div>
-        </div>
+                    <div class="checkout-order-details">
+                        <h4>Deliver to...</h4>
+                        <AddressEditor Address="@OrderState.Order.DeliveryAddress"/>
+                    </div>
+                </div>
 
-        <button class="checkout-button btn btn-warning" type="submit">
-            Place Order
-        </button>
-        <DataAnnotationsValidator/>
-    </EditForm>
+                <button class="checkout-button btn btn-warning" type="submit">
+                    Place Order
+                </button>
+                <DataAnnotationsValidator/>
+            </EditForm>
+        </Authorized>
+    </AuthorizeView>
 </div>
 
 @code {
