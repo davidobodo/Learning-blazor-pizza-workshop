@@ -1,4 +1,5 @@
 ﻿@page "/myorders/{orderId:int}"
+@attribute [Authorize]
 @using System.Threading
 @inject HttpClient HttpClient
 @implements IDisposable
@@ -10,7 +11,7 @@
         <h2>Nope</h2>
         <p>Sorry this order could not be loaded</p>
     }
-    else if(orderWithStatus == null)
+    else if (orderWithStatus == null)
     {
         <text>Loading...</text>
     }
@@ -27,7 +28,7 @@
             </div>
             <div class="track-order-body">
                 <div class="track-order-details">
-                    <OrderReview Order="@orderWithStatus.Order"/>
+                    <OrderReview Order="@orderWithStatus.Order" />
                 </div>
             </div>
         </div>
@@ -52,14 +53,14 @@
     private async void PollForUpdates()
     {
         pollingCancellationToken = new CancellationTokenSource();
-        while(!pollingCancellationToken.IsCancellationRequested)
+        while (!pollingCancellationToken.IsCancellationRequested)
         {
             try
             {
                 invalidOrder = false;
                 orderWithStatus = await HttpClient.GetJsonAsync<OrderWithStatus>($"orders/{OrderId}");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 invalidOrder = true;
                 pollingCancellationToken.Cancel();
