@@ -40,7 +40,7 @@
         NavigationManager.NavigateTo($"myorders/{newOrderId}");
     }
 
-     [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
+    [CascadingParameter] Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,6 +49,19 @@
         {
             await LocalStorage.SetAsync(JSRuntime, "currentorder", OrderState.Order);
             NavigationManager.NavigateTo("user/signin?redirectUri=/checkout", true);
+        }
+        if (!OrderState.Order.Pizzas.Any())
+        {
+            var savedOrder = await LocalStorage.GetAsync<Order>(JSRuntime, "currentorder");
+            if(savedOrder != null)
+            {
+                OrderState.ReplaceOrder(savedOrder);
+                await LocalStorage.DeleteAsync(JSRuntime, "currentorder");
+            }
+            else
+            {
+                NavigationManager.NavigateTo("");
+            }
         }
     }
 }
