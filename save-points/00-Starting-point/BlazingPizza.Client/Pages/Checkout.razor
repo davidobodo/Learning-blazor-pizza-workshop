@@ -2,6 +2,7 @@
 @inject OrderState  OrderState
 @inject HttpClient  HttpClient
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <div class="main">
     <AuthorizeView Context="authContext">
@@ -46,6 +47,7 @@
         var authState = await AuthenticationStateTask;
         if (!authState.User.Identity.IsAuthenticated)
         {
+            await LocalStorage.SetAsync(JSRuntime, "currentorder", OrderState.Order);
             NavigationManager.NavigateTo("user/signin?redirectUri=/checkout", true);
         }
     }
